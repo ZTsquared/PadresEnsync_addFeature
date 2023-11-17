@@ -9,10 +9,12 @@
 
 /* Estilos para el elemento HTML y el cuerpo */
 } 
+
 html, body {
   height: 100%;
   width: 100%;
 }
+
 body {
   margin: 0;
   padding: 0;
@@ -20,6 +22,7 @@ body {
   font-family: "San Francisco", BlinkMacSystemFont, "Segoe UI", 
   Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
+
 
 /* Estilos para el elemento con la clase "caja" */
 .caja{

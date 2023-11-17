@@ -50,6 +50,7 @@ const addGastos = async () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "authorization": "Bearer " + localStorage.getItem("token"),
       },
       body: JSON.stringify(gastos), // Cuerpo de la solicitud en formato JSON
     });

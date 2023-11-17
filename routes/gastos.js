@@ -4,6 +4,7 @@ const db = require("../model/helper");
 
 //NO ME FUNCIONA EL GUARD!!!!!
 const gastoMustExist = require("../guards/gastoMustExist");
+const userMustBeLoggedIn = require("../guards/userMustBeLoggedIn");
 
 
 
@@ -61,10 +62,10 @@ router.get("/:id",  gastoMustExist, function(req, res) {
 
 
 // INSERT a new gasto into the DB
-router.post("/", async function(req, res) {
+router.post("/", userMustBeLoggedIn, async function(req, res) {
   
   const { dateExpense, description, total, userId } =  req.body;
- 
+
   try {
     await db(
       // `INSERT INTO gastos (dateExpense, description, total, userId) VALUES ('${dateExpense}', '${description}', '${total}', '${userId}');`
@@ -75,6 +76,11 @@ router.post("/", async function(req, res) {
     const results = await db("SELECT * FROM gastos");
 
     res.status(201).send({ message: "New expenses created correctly" });
+
+    console.log("--------")
+    console.log(req.user_id + " posted an expense")
+    console.log("--------")
+   
   } catch (err) {
     res.status(500).send(err);
   }

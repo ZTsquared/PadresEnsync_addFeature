@@ -64,3 +64,8 @@ nav li a.active {
 .appName {
   font-size: 24px; 
 }
+
+.inputs{
+  align-items: center;
+  margin: auto;
+}

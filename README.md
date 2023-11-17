@@ -8,6 +8,8 @@ ENSYnc simplifies and syncs coparenting for parents through an intuitive platfor
 - In your terminal, navigate to the project directory and run `npm install`. This will install Express and other server-related dependencies.
 
 - `cd client` and run `npm install`. This will install React client dependencies.
+- Install packages MySQL, Nodemon, Dotenv and CORS: `npm install mysql nodemon dotenv cors`
+- Install encryption packages: `npm install jsonwebtoken bcrypt`
 
 
 ### Database
@@ -49,6 +51,6 @@ Full [project description here](https://docs.google.com/presentation/d/1_EdyenWg
 Includes file map, user flow, design, data methodology, links to source data, feature extension recommendations and more.
 
 
-_This is a student project that was created by vanina cucchietti [CodeOp](http://codeop.tech), a full stack development bootcamp in Barcelona.
+_This is a student project that was created by Vanina Cucchietti and Zia Tyebjee [CodeOp](http://codeop.tech), a full stack development bootcamp in Barcelona.
 
 
