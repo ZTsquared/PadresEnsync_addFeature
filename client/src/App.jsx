@@ -14,30 +14,20 @@ import './App.css'
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [userName, setuserName] = useState("");
 
-  useEffect((() => {console.log(loggedIn)}),[loggedIn])
+  // useEffect((() => {setUserName(getUserName)}),[loggedIn])
 
-  function handleLogin () {
+  function handleLogin (userName) {
     setLoggedIn(true)
+    setuserName(userName) //get this from where? the home page?
   }
 
-  // const login = async () => {
-  //   // axios is like fetch but it does the jason stringify for you and saves the result in the body
-  //   // so in the example below the body of the request contains {data : credentials}
-  //   try {
-  //     const { data } = await axios("/api/auth/login", {
-  //       method: "POST",
-  //       data: credentials,
-  //     });
-  
-  //     //store it locally
-  //     localStorage.setItem("token", data.token);
-  //     console.log(data.message, data.token);
-  //     setLoggedIn(true)
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  function handleLogOut () {
+    setLoggedIn(false);
+    setuserName("");
+    localStorage.removeItem("token");
+  }
 
   
   return (
@@ -48,13 +38,25 @@ function App() {
         <li><Link to="/" >Home</Link></li>
         <li><Link to="/Gastos">Gastos</Link></li>
      </ul>
+     <ul className = "navRightJustify">
+        <li className = "navRightJustify">{loggedIn && `Hi ${userName}!`}</li>
+        <li>
+          {loggedIn && 
+            // <button>Log Out</button>
+            <button className="btn btn-outline-secondary btn-sm"
+                onClick={handleLogOut}>Log Out
+              </button> 
+          }
+        </li>
+     </ul>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
          rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
          crossOrigin="anonymous"></link>
     </nav>
     
     <Routes>
-      <Route path="/" element={<Home logIn = {handleLogin} />} />
+      {/* i am not receiving the username correctly yet... */}
+      <Route path="/" element={<Home logIn = {(userNameInbound) => handleLogin(userNameInbound)} loggedIn = {loggedIn} />} />
       <Route path="/Gastos" element={<Gastos />}>
            <Route path='/Gastos/:id' element={<ZoomGastos />} /> 
      </Route>

@@ -69,3 +69,13 @@ nav li a.active {
   align-items: center;
   margin: auto;
 }
+
+.navRightJustify {
+  text-align: right;
+  display: inline-block;
+  color: black;
+  text-align: center;
+  padding: 5px 10px 5px 10px;
+  text-decoration: none;
+  font-size: 16px;
+}
