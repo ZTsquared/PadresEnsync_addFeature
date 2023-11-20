@@ -25,7 +25,7 @@ router.post('/login',  mustExist("userName", "users", "userName"), async functio
           res.send({msg: `Password incorrect`});
         } else {
           const token = jwt.sign({ user_id }, supersecret);
-          res.send({ message: "Login successful, here is your token", token });
+          res.send({ message: "Login successful, here is your token", token, user_id });
         }
       }
     } catch (err){

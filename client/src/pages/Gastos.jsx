@@ -4,13 +4,21 @@
 // Importación de estilos y bibliotecas:
 import './Gastos.css'
 import React from "react";
-import { useState, useEffect } from 'react'
+import { useState, useEffect} from 'react'
 import GastosForm from "../components/gastosForm";
 // import ZoomGastos from "../components/ZoomGasto";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 import {Link} from "react-router-dom";
 
-export default function GastosPage() {
+export default function GastosPage({loggedIn}) {
+
+  // this should really be be seperate component for protected route so it can be reused.  
+  // react context documentation also explains thoroughly
+  // Could also watch the lecture vidoe, he talked about this but it's not in the slides.
+  if (!loggedIn) {
+    return <Navigate to="/" replace />;
+  }
+
   // fecha
   const [fechaActual, setFechaActual] = useState(new Date());
   // Estado local
@@ -83,8 +91,6 @@ const [visibleGastos, setVisibleGastos] = useState(10);
           if (response.ok) {
             const gastoData = await response.json(); 
             setShowGastosData(gastoData);
-            console.log(id);
-            console.log(gastosData);
             setError("");
        
 

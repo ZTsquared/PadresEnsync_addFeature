@@ -9,6 +9,7 @@ var logger = require('morgan');
 var gastosRouter = require('./routes/gastos');
 var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
+var chatsRouter = require('./routes/chats');
 
 var app = express();
 
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 app.use('/api/gastos', gastosRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/chats', chatsRouter);
 
 
 // Anything that doesn't match the above, send back index.html

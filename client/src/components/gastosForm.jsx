@@ -1,21 +1,27 @@
 import { useState, useEffect } from "react";
+import '../Pages/Gastos.css';
 
 function GastosForm({onGastoAdded}) {
 
 // const [error, setError] = useState("");
+const [currentDate, setCurrentDate] = useState(new Date())
+
 const [gastos, setGastos] = useState({
-    dateExpense: "",
+    dateExpense: `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`,
     description: "",
     total: 0,
     userId: 1,
     approved: false
 }); 
+
+
+
+// useEffect((() => ()))
     
 //evento que se usa para cambiar la cont en las otrs escriben e por event
 const handleInputChange = (event) => {
     const value = event.target.value;
     const name = event.target.name;
-    console.log(value)
 
   //aca decimeos como va a cambiar la const igual a project["i"] i igual valor
   setGastos((state) => ({
@@ -33,7 +39,7 @@ const handleSubmit = async (e) => {
         onGastoAdded();
         // Reinicia el estado del formulario
         setGastos({
-          dateExpense: "",
+          dateExpense: `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`,
           description: "",
           total: 0,
           userId: 1,
@@ -71,16 +77,15 @@ const addGastos = async () => {
   return (
   
     
-    <div className="gastos-form">
-      <form onSubmit={handleSubmit}>
+    <div>
+      <form className="gastos-form" onSubmit={handleSubmit}>
         <div className="formDescription">
           Description
                 <textarea
                     name="description"
-                 
-          
                     value={gastos.description}
                     onChange={(e) => handleInputChange(e)}
+                    className = "inputs"
                 />
         </div>
         
@@ -91,6 +96,7 @@ const addGastos = async () => {
                     name="dateExpense"
                     value={gastos.dateExpense}
                     onChange={(e) => handleInputChange(e)}
+                    className = "inputs"
                 />
         </div>
 
@@ -101,13 +107,13 @@ const addGastos = async () => {
                     name="total"
                     value={gastos.total}
                     onChange={(e) => handleInputChange(e)}
+                    className = "inputs"
                 />
         </div>
 
         <div className="formResponsable">
           Responsable pago
-                  <select name="userId" onChange={handleInputChange}
-                                               value={gastos.userId}>
+                  <select name="userId" onChange={handleInputChange} value={gastos.userId} className = "inputs">
                   <option value="1">1</option>
                   <option value="2">2</option>
                   </select>

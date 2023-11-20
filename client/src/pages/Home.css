@@ -1,0 +1,17 @@
+/* *{
+    background-color: crimson;
+} */
+
+input{
+    display: block;
+    align-items: center;
+    margin: 20px;
+}
+
+
+.login-form{
+    display: block;
+    row-gap: 1em;
+    margin: 15px;
+    padding: 10px;
+  }

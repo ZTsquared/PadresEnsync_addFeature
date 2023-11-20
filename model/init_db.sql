@@ -21,14 +21,23 @@ SET foreign_key_checks = 1;
 
 CREATE TABLE gastos (
   id INT NOT NULL AUTO_INCREMENT,
-  dateExpense DATE not null,
+  dateExpense DATE NOT NULL,
   description VARCHAR(400) not null,
   total  DECIMAL(8,2) not null,
   userId int(11) not null,
   -- the user id should really be a foreign key to the user table. 
   -- I can sort that out later but for now i don't want to break Vani's existing code
-  -- FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  -- FOREIGN KEY (userID) REFERENCES users(id) ON DELETE CASCADE,
   approved tinyint(1),
   PRIMARY KEY (id)
 );
 
+-- CREATE TABLE messages (
+--   id INT NOT NULL AUTO_INCREMENT,
+--   sender_id INT,
+--   receiver_id INT,
+--   text VARCHAR(255),
+--   createdAt DATETIME NOT NULL,
+--   updatedAt DATETIME NOT NULL,
+--   PRIMARY KEY (id)
+-- )

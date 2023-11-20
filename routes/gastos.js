@@ -2,9 +2,9 @@ var express = require('express');
 var router = express.Router();
 const db = require("../model/helper");
 
-//NO ME FUNCIONA EL GUARD!!!!!
-const gastoMustExist = require("../guards/gastoMustExist");
 const userMustBeLoggedIn = require("../guards/userMustBeLoggedIn");
+//NO ME FUNCIONA EL GUARD gastoMustExist!!!!!
+const gastoMustExist = require("../guards/gastoMustExist");
 
 
 
@@ -41,6 +41,7 @@ router.get("/:id",  gastoMustExist, function(req, res) {
   db(`SELECT * FROM gastos WHERE id = ${id};`)
     .then(results => {
       const gasto = results.data[0];
+      console.log(gasto)
 
       // Formatea la fecha en el formato deseado (por ejemplo, "YYYY-MM-DD")
       if (gasto) {

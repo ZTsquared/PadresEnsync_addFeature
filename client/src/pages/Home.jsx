@@ -1,5 +1,6 @@
 import {useState, useEffect} from "react";
 import axios from 'axios'
+import './Home.css'
 
 
 function Home({logIn, loggedIn}) {
@@ -16,8 +17,16 @@ function Home({logIn, loggedIn}) {
   )
   const [logginError, setLogginError] = useState(false)
 
-  useEffect((() => (console.log(credentials))), [credentials])
-  useEffect((() => (setLogginError(false))), [])
+  useEffect((
+    () => setCredentials(
+      {
+        userName : "",
+        password : "",
+      }
+    )
+  ), [loggedIn])
+  // useEffect((() => (console.log(credentials))), [credentials])
+  useEffect((() => (setLogginError(false))), [credentials])
 
   function handleInputChange (e) {
     const {name, value} = e.target
@@ -33,7 +42,7 @@ function Home({logIn, loggedIn}) {
 
 
 
-  const authenticate = async (e, userName) => {
+  const authenticate = async (e) => {
     e.preventDefault()
     // console.log("trying to log in")
     // axios is like fetch but it does the jason stringify for you and saves the result in the body
@@ -44,16 +53,18 @@ function Home({logIn, loggedIn}) {
           data: credentials,
         }
       );
-      console.log(data);
-      if (data.token) {
-        setLogginError(false)
-        logIn(credentials.userName);
-      } else {
+      // console.log(data);
+      if (!data.token) {
         setLogginError(true)
+      } else {
+        logIn(credentials.userName);
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userName", credentials.userName);
+        localStorage.setItem("user_id", data.user_id);
+        setLogginError(false)
       }
       //store it locally
-      localStorage.setItem("token", data.token);
-      console.log(data.message, data.token);
+      // console.log(data.message, data.token);
     } catch (error) {
       console.log(error);
     }
@@ -64,7 +75,7 @@ function Home({logIn, loggedIn}) {
       <img src="/logo.jpg" alt="Logo" style={{ width: '150px' }} />
       <h1 className="appName">PadresEnSync</h1>
       {!loggedIn &&
-        <form action = "submit">
+        <form action = "submit" className="login-form">
           <input name = "userName" onChange={handleInputChange} value = {credentials.userName} type="text" className = "inputs" placeholder="User Name"/>
           <input name = "password" onChange={handleInputChange} value = {credentials.password} type="text" className = "inputs" placeholder="Password"/>
           <button type = "submit" onClick={authenticate} className="btn btn-outline-secondary btn-sm" disabled = {!credentials.userName || !credentials.password}>Log In</button>

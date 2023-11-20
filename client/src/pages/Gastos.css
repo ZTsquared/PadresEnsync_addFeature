@@ -101,14 +101,12 @@ padding: 10px;
 }
 
 
-form{
+/* form{
   display: grid;
   row-gap: 1em;
   margin: 15px;
   padding: 10px;
-  
-
-}
+} */
 
 
 
@@ -117,9 +115,16 @@ textarea{
  
 }
 
-input{
+/* input{
 display: block;
 align-items: center;
+} */
+
+.gastos-form{
+  display: grid;
+  row-gap: .5em;
+  margin: 15px;
+  padding: 10px;
 }
 
 .formDescription{

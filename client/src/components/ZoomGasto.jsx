@@ -11,7 +11,7 @@ export default function ZoomGastos() {
 
      // Efecto para obtener detalles del gasto al cargar la página
     useEffect(() => {
-        fetchGasto();   
+        fetchGasto();
     }, [id]);
 
     async function fetchGasto() {
@@ -26,6 +26,8 @@ export default function ZoomGastos() {
 
             if (response.ok) {
                 const data = await response.json();
+                // console.log("fetch data")
+                // console.log(data)
                 setDetallesGasto(data);
                 } else {
                 console.log(`Error del servidor: ${response.status} : ${response.statusText}`);
