@@ -56,8 +56,8 @@ router.post("/", userMustBeLoggedIn, mustExist ("receiver_id", "users", "id"), m
     try {
       const resultObject = await db(
         // `INSERT INTO gastos (dateExpense, description, total, userId) VALUES ('${dateExpense}', '${description}', '${total}', '${userId}');`
-        `INSERT INTO messages (sender_id, receiver_id, text, createdAt, updatedAt)
-         VALUES ('${sender_id}', '${receiver_id}', "${text}", "2023-04-22 10:34:53.44", "2023-04-22 10:34:54.44");`
+        `INSERT INTO messages (sender_id, receiver_id, text)
+         VALUES ("${sender_id}", "${receiver_id}", "${text}");`
         );
         // console.log("-----------")
         // console.log(resultObject)

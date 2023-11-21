@@ -49,7 +49,7 @@ function Messages({loggedIn}) {
     return (
         <div className="text-start">
             <div className="row ms-0" >
-                <div className="col-3 border border-2 rounded-3 p-2 mt-2">
+                <div className="col-3 border border-2 rounded-3 p-2 mt-2"> {localStorage.getItem("userName")}, who do you want to chat with?
                     {partners.map(
                         (partner, i) => 
                             (!(partner.userName === localStorage.getItem("userName")) && <div key = {i} >

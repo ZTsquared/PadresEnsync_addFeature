@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react'
 import { Navigate, useParams, useOutletContext } from "react-router-dom";
 import Pusher from "pusher-js"; // node_modules/pusher
+import './MessagesByPartner.css'
 
 const PUSHER_KEY = import.meta.env.VITE_PUSHER_KEY;
 
@@ -12,14 +13,16 @@ function MessagesByPartner() {
   const [messageHistory, setMessageHistory] = useState([])
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState("")
-  const test = true
+  const [user_id, setUser_id] = useState("0")
+
 
   //userID should probably be grabbed from local storage and saved in state...
 
   // useEffect((() => {console.log(messages)}), [messages])
 
+  useEffect((() => {setUser_id(+localStorage.getItem("user_id"))}), [])
   useEffect((() => {setMessages([])}), [partnerID])
-  useEffect((() => {getMessageHistory()}), [partnerID])
+  useEffect((() => {getMessageHistory()}), [partnerID, user_id])
 
 
   useEffect((() => {
@@ -29,10 +32,11 @@ function MessagesByPartner() {
       cluster: 'eu'
     });
     
-    const chatters = [+localStorage.getItem("user_id"), +partnerID].sort()
+    const chatters = [user_id, +partnerID].sort()
     const  channelName = `chat-${chatters[0]}-${chatters[1]}`
 
-    var channelSubscription = pusher.subscribe(channelName);
+
+    let channelSubscription = pusher.subscribe(channelName);
     channelSubscription.bind('message', async function(data) {
       // alert(JSON.stringify(data));
       // console.log(data)
@@ -41,9 +45,11 @@ function MessagesByPartner() {
     });
 
     return () => {
-      pusher.unsubscribe("my-channel");
+      // channelSubscription.unbind()
+      pusher.unsubscribe(channelName);
     };
-  }), [partnerID])
+
+  }), [partnerID, user_id])
 
 
   async function getMessageHistory() {
@@ -53,7 +59,7 @@ function MessagesByPartner() {
       // console.log(`/api/messages/recent?sender_id=${+localStorage.getItem("user_id")}&receiver_id=${partnerID}`)
       const resultObject = await fetch(`/api/messages/recent/?sender_id=${+localStorage.getItem("user_id")}&receiver_id=${partnerID}`)
       const data = await resultObject.json();
-      setMessageHistory(data);
+      setMessageHistory(data.reverse());
     } catch (err) {
       console.log("could not load message history")
       console.log(err)
@@ -62,22 +68,23 @@ function MessagesByPartner() {
 
 
   function handleInputChange (e) {
+  
     setNewMessage(e.target.value)
   }
 
 
-  function handleSubmit (e) {
+  async function handleSubmit (e) {
     e.preventDefault()
     // console.log(newMessage);
     //post message to pusher
-    sendMessage();
+    await sendMessage();
     setNewMessage("");
   }
 
 
   async function sendMessage () {
     try{
-      const response = await fetch(`/api/chats/${localStorage.getItem("user_id")}/${partnerID}`, {
+      const response = await fetch(`/api/chats/${user_id}/${partnerID}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -99,7 +106,7 @@ function MessagesByPartner() {
           "authorization": "Bearer " + localStorage.getItem("token"),
         },
         // body: JSON.stringify({data:{message: newMessage}}),
-        body: JSON.stringify({sender_id: localStorage.getItem("user_id"), receiver_id: partnerID, text: newMessage}),
+        body: JSON.stringify({sender_id: user_id, receiver_id: partnerID, text: newMessage}),
       });
     }catch (err){
       console.log("message could not be saved")
@@ -111,11 +118,12 @@ function MessagesByPartner() {
   return (
     <div className="border border-2 rounded-3 p-2 mt-2">
       <div className="mt-2">Your conversation with {partnerName}:</div>
-      <div className="border border-2 rounded-3 p-2">
+      {/* <div className="border border-2 rounded-3 p-2"> */}
+      <div className="messages-container">
         {/* map through messageHistory then through messages.  show on left if from partner id, right if from user id */}
-        {messageHistory.map((message, i) => <div key = {i}>{message.text}</div>)}
-        <div className = "text-black-50">--- New Messages Below ---</div>
-        {messages.map((message, i) => <div key = {i}>{message.text}</div>)}
+          {messageHistory.map((message, i) => <div key = {i} className = {(user_id === +message.sender_id) ? "message-div-from-me" : "message-div-from-other"}><div className = {(user_id === +message.sender_id) ? "message-from-me" : "message-from-other"}>{message.text}</div></div>)}
+          {/* <div className = "new-message-break ">----- New Messages -----</div> */}
+          {messages.map((message, i) => <div key = {i} className = {(user_id === +message.sender_id) ? "message-from-me" : "message-from-other"}>{message.text}</div>)}
       </div>
       <div className="mt-4">Send {partnerName} a new message:</div>
       <form action="Submit" onSubmit = {handleSubmit} className="input-group">
