@@ -11,7 +11,28 @@ router.get("/", async (req, res) => {
         const resultObject = await db("SELECT * FROM messages;");
         const messages = resultObject.data;
         console.log(resultObject.data)
-        res.status(404).send(messages);
+        res.send(messages);
+    } catch (err) {
+        console.error("Error downloading messages:", err);
+        res.status(500).send(err.message);
+    }
+  });
+
+  
+  router.get("/recent", async (req, res) => {
+    // Send back recent message history
+    console.log(req.query)
+    const sender_id = req.query.sender_id;
+    const receiver_id = req.query.receiver_id;
+    try {
+        const resultObject = await db(`SELECT * FROM messages where 
+          (sender_id = ${sender_id} AND receiver_id = ${receiver_id}) 
+          OR (sender_id = ${receiver_id} AND receiver_id = ${sender_id}) 
+          ORDER BY id DESC LIMIT 10
+          ;`);
+        const messages = resultObject.data;
+        console.log(resultObject.data)
+        res.send(messages);
     } catch (err) {
         console.error("Error downloading messages:", err);
         res.status(500).send(err.message);

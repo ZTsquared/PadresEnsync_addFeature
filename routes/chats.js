@@ -14,12 +14,19 @@ const pusher_channel = new Pusher({
     useTLS: true
 })
 
+
 router.post(`/:sender_id/:receiver_id`, (req, res, next) =>{
     const {sender_id, receiver_id} = req.params;
     // const text = req.body.data.message;
     const text = req.body.message;
 
-    pusher_channel.trigger("my-channel", "message", {
+    //but this doesn't work with double digit?
+    const chatters = [sender_id, receiver_id].sort()
+
+    const channelName = `chat-${chatters[0]}-${chatters[1]}`
+
+
+    pusher_channel.trigger(channelName, "message", {
         sender_id,
         receiver_id,
         text,

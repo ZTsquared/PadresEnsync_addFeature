@@ -10,9 +10,15 @@ function MessagesByPartner() {
   const {partnerID} = useParams();
   const partnerName = useOutletContext();
   const [messageHistory, setMessageHistory] = useState([])
+  const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState("")
 
-  useEffect((() => {console.log(partnerName)}), [])
+  //userID should probably be grabbed from local storage and saved in state...
+
+  // useEffect((() => {console.log(messages)}), [messages])
+
+  useEffect((() => {setMessages([])}), [partnerID])
+
   useEffect((() => 
     {
       Pusher.logToConsole = true;
@@ -20,10 +26,13 @@ function MessagesByPartner() {
       var pusher = new Pusher(PUSHER_KEY, {
         cluster: 'eu'
       });
-  
-      var channelSubscription = pusher.subscribe('my-channel');
+      
+      const chatters = [+localStorage.getItem("user_id"), +partnerID].sort()
+      const  channelName = `chat-${chatters[0]}-${chatters[1]}`
+
+      var channelSubscription = pusher.subscribe(channelName);
       channelSubscription.bind('message', async function(data) {
-        alert(JSON.stringify(data));
+        // alert(JSON.stringify(data));
         // console.log("--------------")
         // console.log("--------------")
         // console.log("--------------")
@@ -32,21 +41,23 @@ function MessagesByPartner() {
         // console.log("--------------")
         // console.log("--------------")
         // console.log("--------------")
-        try{
-          const response = await fetch(`/api/messages/`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "authorization": "Bearer " + localStorage.getItem("token"),
-            },
-            body: JSON.stringify(data), // Cuerpo de la solicitud en formato JSON
-          });
-          // console.log("after the fetch")
-          // console.log(response)
-        }catch (err){
-          console.log("posting inbound message to database failed")
-          console.log(err)
-        }
+        setMessages((currentState)=>[...currentState, data])
+        console.log(messages)
+        // try{
+        //   const response = await fetch(`/api/messages/`, {
+        //     method: "POST",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //       "authorization": "Bearer " + localStorage.getItem("token"),
+        //     },
+        //     body: JSON.stringify(data), // Cuerpo de la solicitud en formato JSON
+        //   });
+        //   // console.log("after the fetch")
+        //   // console.log(response)
+        // }catch (err){
+        //   console.log("posting inbound message to database failed")
+        //   console.log(err)
+        // }
       });
 
       return () => {
@@ -58,6 +69,13 @@ function MessagesByPartner() {
   async function getMessageHistory() {
     //fetch message history between user_id in local storage and partnerID ordered by sent date
     //setMessageHistory
+    try{
+      console.log(`/api/messages/recent?sender_id=${+localStorage.getItem("user_id")}&receiver_id = ${+partnerID}`)
+      const resultObject = await fetch(`/api/messages/recent/?sender_id=${+localStorage.getItem("user_id")}&receiver_id = ${+partnerID}`)
+    } catch (err) {
+      console.log("could not load message history")
+      console.log(err)
+    }
   }
 
   function handleInputChange (e) {
@@ -92,6 +110,23 @@ function MessagesByPartner() {
       console.log("message could not be sent")
       console.log(err)
     }
+
+    try{
+      const response = await fetch(`/api/messages/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "authorization": "Bearer " + localStorage.getItem("token"),
+        },
+        // body: JSON.stringify({data:{message: newMessage}}),
+        body: JSON.stringify({sender_id: localStorage.getItem("user_id"), receiver_id: partnerID, text: newMessage}),
+      });
+      console.log("after the fetch")
+      console.log(response)
+    }catch (err){
+      console.log("message could not be saved")
+      console.log(err)
+    }
   }
 
 
@@ -99,11 +134,10 @@ function MessagesByPartner() {
     <div className="border border-2 rounded-3 p-2 mt-2">
       <div className="mt-2">Your conversation with {partnerName}:</div>
       <div className="border border-2 rounded-3 p-2">
+        <div className = "text-black-50">--- New Messages Below ---</div>
+        {messageHistory.map((message, i) => <div key = {i}>{message.text}</div>)}
         {/* map through messageHistory.  show on left if from partner id, right if from user id */}
-        <div>map message history</div>
-        <div>map message history</div>
-        <div>map message history</div>
-        <div>map message history</div>
+        {messages.map((message, i) => <div key = {i}>{message.text}</div>)}
       </div>
       <div className="mt-4">Send {partnerName} a new message:</div>
       <form action="Submit" onSubmit = {handleSubmit} className="input-group">
