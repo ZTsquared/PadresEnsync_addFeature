@@ -21,9 +21,13 @@ router.get("/", async (req, res) => {
   
   router.get("/recent", async (req, res) => {
     // Send back recent message history
+    console.log("-----------")
+    console.log("-----------")
     console.log(req.query)
-    const sender_id = req.query.sender_id;
-    const receiver_id = req.query.receiver_id;
+    console.log("-----------")
+    console.log("-----------")
+    const sender_id = req.query["sender_id"];
+    const receiver_id = req.query["receiver_id"];
     try {
         const resultObject = await db(`SELECT * FROM messages where 
           (sender_id = ${sender_id} AND receiver_id = ${receiver_id}) 

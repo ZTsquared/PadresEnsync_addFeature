@@ -16,7 +16,7 @@ function Messages({loggedIn}) {
 
     const nav = useNavigate();
 
-    useEffect(() => {console.log(partners)}, [partners]);
+    // useEffect(() => {console.log(partners)}, [partners]);
     useEffect(() => {getPartners()}, []);
     useEffect(() => {nav(`/Messages/${partnerID}`)}, [partnerID])
 
