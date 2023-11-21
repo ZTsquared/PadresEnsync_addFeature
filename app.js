@@ -10,6 +10,7 @@ var gastosRouter = require('./routes/gastos');
 var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
 var chatsRouter = require('./routes/chats');
+var messagesRouter = require('./routes/messages');
 
 var app = express();
 
@@ -23,6 +24,7 @@ app.use('/api/gastos', gastosRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/chats', chatsRouter);
+app.use('/api/messages', messagesRouter);
 
 
 // Anything that doesn't match the above, send back index.html

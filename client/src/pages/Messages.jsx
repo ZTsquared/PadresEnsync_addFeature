@@ -48,18 +48,18 @@ function Messages({loggedIn}) {
     // need to make the active button obvious,  see toggle in https://getbootstrap.com/docs/5.3/components/buttons/#base-class
     return (
         <div className="text-start">
-            <div className="row" >
-                <div className="col-3 d-grid gap-2">
+            <div className="row ms-0" >
+                <div className="col-3 border border-2 rounded-3 p-2 mt-2">
                     {partners.map(
                         (partner, i) => 
-                            <div key = {i} >
+                            (!(partner.userName === localStorage.getItem("userName")) && <div key = {i} >
                                 <button 
                                     onClick = {() => handelClick(partner)} 
-                                    className={ (partner.id===partnerID) ? "btn btn-outline-dark" : "btn btn-light active"} 
+                                    className={ (partner.id===partnerID) ? "btn btn-outline-dark mt-2" : "btn btn-light active mt-2"} 
                                 > 
                                     {partner.userName} 
                                 </button>
-                            </div>
+                            </div>)
                     )}
                 </div>
                 <div className="col-9">

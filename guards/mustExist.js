@@ -10,7 +10,7 @@ function mustExist (queryParamKey, queryTableName, queryColumnName){
         if (!searchTerm) {
             searchTerm = req.body[queryParamKey];
         }
-        // console.log(searchTerm)
+        console.log(searchTerm)
         try {
             // console.log(queryParamKey)
             // console.log(queryParamKey === "id")

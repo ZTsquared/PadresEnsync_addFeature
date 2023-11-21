@@ -16,7 +16,8 @@ const pusher_channel = new Pusher({
 
 router.post(`/:sender_id/:receiver_id`, (req, res, next) =>{
     const {sender_id, receiver_id} = req.params;
-    const text = req.body.data.message;
+    // const text = req.body.data.message;
+    const text = req.body.message;
 
     pusher_channel.trigger("my-channel", "message", {
         sender_id,
